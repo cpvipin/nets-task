@@ -1,0 +1,69 @@
+<div class="row content">
+	<div class="col-sm-2"></div>
+	<div class="col-sm-8">
+
+		<div class="panel panel-default">
+			<div class="panel-heading">Second Task <button type="button" ng-click="onGoBack()"
+			class="btn btn-default pull-right">Go to first task</button></div>
+				<tabset> <tab heading="Region({{retVal.region.statistics.length}})">
+				<div class="panel-body"  style="overflow-y: auto; height: 400px;">
+				<table class="table table-striped tab-scroll">
+					<thead>
+						<tr>
+							<th>Kode</th>
+							<th>Verdi</th>
+						</tr>
+					</thead>
+					<tbody>
+					<tr><td colspan="2" ng-if="showLoader"> Data Loading ... </td></tr>
+						<tr ng-repeat="item in retVal.region.statistics">
+							<td>{{ item.index }}</td>
+							<td>{{ item.label }}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+				</tab> <tab heading="kvartal ({{retVal.Quarter.statistics.length}})">
+				<div class="panel-body"  style="overflow-y: auto; height: 400px;">
+			
+				<table class="table table-striped tab-scroll">
+					<thead>
+						<tr>
+							<th>Kode</th>
+							<th>Verdi</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="item in retVal.Quarter.statistics">
+							<td>{{ item.index }}</td>
+							<td>{{ item.label }}</td>
+						</tr>
+					</tbody>
+				</table>
+				</div>
+				</tab> <tab heading="statistikkvariabel ( {{ retVal.Contents.statistics.length }} )">
+				<div class="panel-body"  style="overflow-y: auto; height: 500px;">
+				<table class="table table-striped tab-scroll">
+					<thead>
+						<tr>
+							<th>Kode</th>
+							<th>Verdi</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="item in retVal.Contents.statistics">
+							<td>{{ item.index }}</td>
+							<td>{{ item.label }}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+				</tab> </tabset>
+
+
+				
+		</div>
+	</div>
+	<div class="col-sm-2"></div>
+
+</div>

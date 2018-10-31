@@ -1,0 +1,16 @@
+Instructions: 
+
+The task is to create a web application that retrieves data from a REST service and displays the information on a web page.
+It is suggested that Spring and Angular are used, but it is perfectly OK if there are other solutions with Java and
+JavaScript.
+
+In this package you will find an application skeleton that uses SpringBoot, Angular (v. 1.5) and Bootstrap. This is one
+starting point and contains a REST service that returns a text and a web page that contains only text.
+
+The first task is to expand the webpage so that it displays the text that the REST service returns. You see in the table.html files
+and conroller.js where we suggest you can change.
+
+Another task is to expand the content of the web page to retrieve information from an open API. You can use whatever you want,
+but as an example you can use http://data.ssb.no/api/v0/dataset/1106.csv?lang=en and view the content of the page. The information must
+appears in a table (with columns and rows). Bootstrap is available for styling, but if you want and are good at CSS, you can
+You style this yourself. SSB's API offers both csv and json, see here: http://data.ssb.no/api/v0/dataset/1106.
