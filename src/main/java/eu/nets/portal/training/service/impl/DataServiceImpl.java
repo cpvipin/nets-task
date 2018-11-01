@@ -66,7 +66,10 @@ public class DataServiceImpl implements DataService {
 	/**
 	 * <p>
 	 * Formatting the data set from api {@link DataServiceImpl#ssbApiUrl} to a form that can be directly 
-	 * repeat from UI
+	 * repeat from UI.
+	 * If the data is already cached it will return.
+	 * This can be configured in application.properties
+	 * {@link DataServiceImpl#isCacheEnabled}
 	 * </p>
 	 * 
 	 * @param rootNode
@@ -155,7 +158,12 @@ public class DataServiceImpl implements DataService {
 
 	}
 	
-	
+	/**
+	 * <p>
+	 * Api data will be cached for a specific time. Based on the configured code in <code>application.properties</code>
+	 * below logic will determine whether the cache is valid or not.
+	 * </p>
+	 */
 	private boolean isCacheValid()
 	{
 		
