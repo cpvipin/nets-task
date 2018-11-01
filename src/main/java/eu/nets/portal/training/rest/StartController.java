@@ -35,8 +35,10 @@ public class StartController {
 		try {
 			dataMap = dataService.getSsbData();
 		}
-		catch (Exception e) {
-			e.printStackTrace();
+		catch (Exception e) { 
+			//TODO Create custom exception class and catch specific exceptions. 
+			//Log error using logger
+			return new ResponseEntity(HttpStatus.NO_CONTENT);
 		}
 
 		return new ResponseEntity(dataMap, HttpStatus.OK);
