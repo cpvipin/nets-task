@@ -2,7 +2,14 @@ package eu.nets.portal.training.entity;
 
 import java.util.List;
 import java.util.Map;
-
+/**
+ * <p>Formatted response will be patched to this entity and will be returned.
+ * Inner class <code>ResponseDtoStat.class</code> will hold the array of items returned to ui
+ * </p>
+ * 
+ * @author vipin
+ *
+ */
 public class ResponseDto {
 
 	private String label;

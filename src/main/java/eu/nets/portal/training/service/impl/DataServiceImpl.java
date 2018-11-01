@@ -46,6 +46,10 @@ public class DataServiceImpl implements DataService {
 	 * @throws IOException
 	 */
 	private Map formatSsbData(JsonNode rootNode) throws IOException {
+		
+		/**
+		 * TODO Optimize the code for faster serializing
+		 */
 		Map dataMap = new HashMap();
 		ObjectMapper mapper = new ObjectMapper();
 
