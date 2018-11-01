@@ -8,9 +8,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import eu.nets.portal.training.util.CommonUtils;
+
 import static org.hamcrest.Matchers.equalTo;
+import static org.junit.Assert.assertFalse;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -27,4 +31,16 @@ public class StartControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string(equalTo("Greetings from Spring Boot!")));
     }
+    
+    
+    @Test
+	public void testSsbDataReturnsEmptyResultWithSuccessStatus()  throws Exception{
+    	MvcResult result = mvc.perform(MockMvcRequestBuilders.get("/rest/ssbData").accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andReturn();
+    	String content = result.getResponse().getContentAsString();
+    	assertFalse(content.isEmpty());
+
+	}
+
 }
