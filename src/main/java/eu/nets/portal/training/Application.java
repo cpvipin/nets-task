@@ -8,7 +8,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 
 @SpringBootApplication
-@PropertySources({ @PropertySource(value = "file:environment.properties", ignoreResourceNotFound = true) })
+@PropertySources({ @PropertySource(value ="classpath:application.properties", ignoreResourceNotFound = true) })
 public class Application {
 
 	public static void main(String[] args) {

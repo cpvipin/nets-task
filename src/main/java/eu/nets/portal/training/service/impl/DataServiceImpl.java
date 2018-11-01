@@ -17,7 +17,7 @@ import eu.nets.portal.training.entity.ResponseDto;
 import eu.nets.portal.training.service.DataService;
 
 @Service
-@PropertySource(value = "file:environment.properties")
+@PropertySource(value = "classpath:application.properties")
 public class DataServiceImpl implements DataService {
 
 	@Value("${ssb.api.url}")
