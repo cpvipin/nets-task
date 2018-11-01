@@ -2,9 +2,12 @@ package eu.nets.portal.training.service.impl;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.ResponseEntity;
@@ -13,8 +16,10 @@ import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import eu.nets.portal.training.cache.CacheProvider;
 import eu.nets.portal.training.entity.ResponseDto;
 import eu.nets.portal.training.service.DataService;
+import eu.nets.portal.training.util.DateUtils;
 
 @Service
 @PropertySource(value = "classpath:application.properties")
@@ -22,9 +27,29 @@ public class DataServiceImpl implements DataService {
 
 	@Value("${ssb.api.url}")
 	private String ssbApiUrl;
+	
+	
+    @Value("${cache.timeout}")
+    private Integer timeout;
+
+    @Value("${cache.isenabled}")
+    private Boolean isCacheEnabled;
+    
+    
+	@Autowired
+	private CacheProvider cacheProvider;
+	
+	
 
 	public Map getSsbData() throws IOException {
-		Map dataMap;
+		Map dataMap=cacheProvider.getDataMap();
+		
+		if(dataMap!=null && isCacheValid())
+		{
+			return dataMap;
+		}
+		
+		
 		RestTemplate restTemplate = new RestTemplate();
 		ResponseEntity<String> response = restTemplate.getForEntity(ssbApiUrl, String.class);
 		ObjectMapper mapper = new ObjectMapper();
@@ -32,6 +57,9 @@ public class DataServiceImpl implements DataService {
 		JsonNode rootNode = root.path("dataset").path("dimension");
 		dataMap = formatSsbData(rootNode);
 
+		cacheProvider.setDataMap(dataMap);
+		cacheProvider.setLastAccessed(DateUtils.getCurrentDate());
+		
 		return dataMap;
 	}
 
@@ -125,5 +153,35 @@ public class DataServiceImpl implements DataService {
 
 		return dataMap;
 
+	}
+	
+	
+	private boolean isCacheValid()
+	{
+		
+		Date currentDate=DateUtils.getCurrentDate();
+		Date lastApiAccessTime=cacheProvider.getLastAccessed();
+		Date validUpTo=DateUtils.addMillisecondsFromDate(lastApiAccessTime,timeout);
+		
+		return DateUtils.compareDate(validUpTo,currentDate)>0 && isCacheEnabled ;
+				
+		
+	}
+	
+
+	public String getSsbApiUrl() {
+		return ssbApiUrl;
+	}
+
+	public void setSsbApiUrl(String ssbApiUrl) {
+		this.ssbApiUrl = ssbApiUrl;
+	}
+
+	public CacheProvider getCacheProvider() {
+		return cacheProvider;
+	}
+
+	public void setCacheProvider(CacheProvider cacheProvider) {
+		this.cacheProvider = cacheProvider;
 	}
 }
