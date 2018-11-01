@@ -14,3 +14,13 @@ Another task is to expand the content of the web page to retrieve information fr
 but as an example you can use http://data.ssb.no/api/v0/dataset/1106.csv?lang=en and view the content of the page. The information must
 appears in a table (with columns and rows). Bootstrap is available for styling, but if you want and are good at CSS, you can
 You style this yourself. SSB's API offers both csv and json, see here: http://data.ssb.no/api/v0/dataset/1106.
+
+
+How to run?
+
+Go to project folder. Then type maven command to build the project
+mvn clean install
+Then execute jar file inside target folder 
+java -jar filename.jar
+
+Inbuilt jetty server is included in the jar. If required,the server port number, api url to be called etc can be changed in application.properties file.
