@@ -42,8 +42,8 @@ public class RealCacheTimeTest {
 
 	@Test
 	public void testTimeValidatesCorrectTimestamp() {
-		assertTrue(time.isCacheValid(time.getCurrentTimestamp()));
-		assertTrue(time.isCacheValid(time.getEarliestValidCacheTimestamp()));
+		assertTrue(time.isValidCacheTimestamp(time.getCurrentTimestamp()));
+		assertTrue(time.isValidCacheTimestamp(time.getEarliestValidCacheTimestamp()));
 	}
 
 	@Test
