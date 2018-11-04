@@ -3,8 +3,11 @@ package eu.nets.portal.training.cache;
 import java.util.Date;
 import java.util.Map;
 
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import eu.nets.portal.training.cache.time.Time;
+
 /**
  * 
  * A singleton class to cache API result for a specific time
@@ -14,16 +17,19 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class CacheProvider {
-	
-	private Date lastAccessed;
-	
+
+	@Autowired
+	private Time time;
+
+	private long lastAccessed;
+
 	private Map dataMap;
 
-	public Date getLastAccessed() {
+	public long getLastAccessed() {
 		return lastAccessed;
 	}
 
-	public void setLastAccessed(Date lastAccessed) {
+	public void setLastAccessed(long lastAccessed) {
 		this.lastAccessed = lastAccessed;
 	}
 
@@ -33,6 +39,10 @@ public class CacheProvider {
 
 	public void setDataMap(Map dataMap) {
 		this.dataMap = dataMap;
+	}
+
+	public boolean isCacheValid() {
+		return this.getDataMap() != null && time.isCacheValid(getLastAccessed());
 	}
 
 }

@@ -2,7 +2,6 @@ package eu.nets.portal.training.service.impl;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +18,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import eu.nets.portal.training.cache.CacheProvider;
 import eu.nets.portal.training.entity.ResponseDto;
 import eu.nets.portal.training.service.DataService;
-import eu.nets.portal.training.util.DateUtils;
 
 @Service
 @PropertySource(value = "classpath:application.properties")
@@ -27,48 +25,33 @@ public class DataServiceImpl implements DataService {
 
 	@Value("${ssb.api.url}")
 	private String ssbApiUrl;
-	
-	
-    @Value("${cache.timeout}")
-    private Integer timeout;
 
-    @Value("${cache.isenabled}")
-    private Boolean isCacheEnabled;
-    
-    
 	@Autowired
 	private CacheProvider cacheProvider;
-	
-	
 
 	public Map getSsbData() throws IOException {
-		Map dataMap=cacheProvider.getDataMap();
-		
-		if(dataMap!=null && isCacheValid())
-		{
+
+		Map dataMap = cacheProvider.getDataMap();
+
+		if (cacheProvider.isCacheValid()) {
 			return dataMap;
 		}
-		
-		
+
 		RestTemplate restTemplate = new RestTemplate();
 		ResponseEntity<String> response = restTemplate.getForEntity(ssbApiUrl, String.class);
 		ObjectMapper mapper = new ObjectMapper();
 		JsonNode root = mapper.readTree(response.getBody());
 		JsonNode rootNode = root.path("dataset").path("dimension");
 		dataMap = formatSsbData(rootNode);
-
 		cacheProvider.setDataMap(dataMap);
-		cacheProvider.setLastAccessed(DateUtils.getCurrentDate());
-		
+		cacheProvider.setLastAccessed(System.currentTimeMillis());
 		return dataMap;
 	}
 
 	/**
 	 * <p>
-	 * Formatting the data set from api {@link DataServiceImpl#ssbApiUrl} to a form that can be directly 
-	 * repeat from UI.
-	 * If the data is already cached it will return.
-	 * This can be configured in application.properties
+	 * Formatting the data set from api {@link DataServiceImpl#ssbApiUrl} to a form that can be directly repeat from UI.
+	 * If the data is already cached it will return. This can be configured in application.properties
 	 * {@link DataServiceImpl#isCacheEnabled}
 	 * </p>
 	 * 
@@ -77,7 +60,7 @@ public class DataServiceImpl implements DataService {
 	 * @throws IOException
 	 */
 	private Map formatSsbData(JsonNode rootNode) throws IOException {
-		
+
 		/**
 		 * TODO Optimize the code for faster serializing
 		 */
@@ -157,25 +140,6 @@ public class DataServiceImpl implements DataService {
 		return dataMap;
 
 	}
-	
-	/**
-	 * <p>
-	 * Api data will be cached for a specific time. Based on the configured code in <code>application.properties</code>
-	 * below logic will determine whether the cache is valid or not.
-	 * </p>
-	 */
-	private boolean isCacheValid()
-	{
-		
-		Date currentDate=DateUtils.getCurrentDate();
-		Date lastApiAccessTime=cacheProvider.getLastAccessed();
-		Date validUpTo=DateUtils.addMillisecondsFromDate(lastApiAccessTime,timeout);
-		
-		return DateUtils.compareDate(validUpTo,currentDate)>0 && isCacheEnabled ;
-				
-		
-	}
-	
 
 	public String getSsbApiUrl() {
 		return ssbApiUrl;
